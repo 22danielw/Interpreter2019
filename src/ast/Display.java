@@ -45,7 +45,10 @@ public class Display extends Statement
      */
     public void exec(Environment e)
     {
-        System.out.println(exp.eval(e));
+        if (exp.eval(e).whichVal().equals("b"))
+            System.out.println(exp.eval(e).getBoolVal());
+        else
+            System.out.println(exp.eval(e).getIntVal());
         if (read != null)
         {
             Scanner sc = new Scanner(System.in);

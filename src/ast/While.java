@@ -57,6 +57,9 @@ public class While extends Statement
         else
             cond = expression.eval(e).getBoolVal();
         while (cond)
+        {
             program.exec(e);
+            cond = expression.eval(e).getBoolVal();
+        }
     }
 }

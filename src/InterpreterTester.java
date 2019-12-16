@@ -13,7 +13,17 @@ public class InterpreterTester {
 
     public static void main(String[] args) throws Exception
     {
-        //First test file
+        String s = "tempTest.txt";
+        InputStream reader = new FileInputStream(s);
+        Scanner scanner = new Scanner(reader);
+        Parser p = new Parser(scanner);
+        Environment env = new Environment();
+        Program program1 = p.parseProgram();
+        program1.exec(env);
+
+
+
+        /*//First test file
         String s = "simpleTest.txt";
         InputStream reader = new FileInputStream(s);
         Scanner scanner = new Scanner(reader);
@@ -29,6 +39,6 @@ public class InterpreterTester {
         scanner = new Scanner(reader);
         p = new Parser(scanner);
         env = new Environment();
-        Program program2 = p.parseProgram();
+        Program program2 = p.parseProgram();*/
     }
 }

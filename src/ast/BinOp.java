@@ -88,16 +88,16 @@ public class BinOp extends Expression
             if (op.equals("="))
             {
                 if (exp1.eval(e).whichVal().equals("b"))
-                    return new Value(exp1.eval(e).getBoolVal() != exp2.eval(e).getBoolVal());
+                    return new Value(exp1.eval(e).getBoolVal() == exp2.eval(e).getBoolVal());
                 else
-                    return new Value(exp1.eval(e).getIntVal() != exp2.eval(e).getIntVal());
+                    return new Value(exp1.eval(e).getIntVal() == exp2.eval(e).getIntVal());
             }
             else if (op.equals("<>"))
             {
                 if (exp1.eval(e).whichVal().equals("b"))
-                    return new Value(exp1.eval(e).getBoolVal() == exp2.eval(e).getBoolVal());
+                    return new Value(exp1.eval(e).getBoolVal() != exp2.eval(e).getBoolVal());
                 else
-                    return new Value(exp1.eval(e).getIntVal() == exp2.eval(e).getIntVal());
+                    return new Value(exp1.eval(e).getIntVal() != exp2.eval(e).getIntVal());
             }
             else if (op.equals("<="))
                 return new Value(exp1.eval(e).getIntVal() <= exp2.eval(e).getIntVal());

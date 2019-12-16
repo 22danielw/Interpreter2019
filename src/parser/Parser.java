@@ -88,7 +88,7 @@ public class Parser
     public Program parseProgram() throws ScanErrorException
     {
         ArrayList<Statement> statements = new ArrayList<Statement>();
-        while (scanner.hasNext() && !(currentToken.equals("end") || currentToken.equals("else")) )
+        while (scanner.hasNext() &&  !(currentToken.equals("end") || currentToken.equals("else")) )
         {
             Statement s = parseStatement();
             statements.add(s);
@@ -126,6 +126,7 @@ public class Parser
             Expression e = parseExpression();
             eat("do");
             Program p = parseProgram();
+            eat("end");
             return new While(e, p);
         }
         else
@@ -172,19 +173,13 @@ public class Parser
     private Expression parseExpression() throws ScanErrorException
     {
         Expression exp = parseAddExpression();
-        return parseExpressionHelper(exp);
-
-    }
-
-    private Expression parseExpressionHelper(Expression exp1) throws ScanErrorException // FIX LATER
-    {
-        if (isRelop(currentToken))
+        while (isRelop(currentToken))
         {
-            String op = parseRelop();
-            return new BinOp(op, exp1, parseExpressionHelper(parseAddExpression()));
+            String s = parseRelop();
+            Expression e = parseExpression();
+            exp = new BinOp(s, exp, e);
         }
-        else
-            return exp1;
+        return exp;
     }
 
     /**
@@ -245,7 +240,10 @@ public class Parser
             return new BinOp("*", new Number(-1), parseValue());
         }
         else
-            return parseValue();
+        {
+            Expression e = parseValue();
+            return e;
+        }
     }
 
     private Expression parseValue() throws ScanErrorException
@@ -260,6 +258,17 @@ public class Parser
         else if (isNumber(currentToken))
         {
             return parseNumber();
+        }
+        else if (currentToken.equals("true") || currentToken.equals("false"))
+        {
+            String s = currentToken;
+            eat(currentToken);
+            if (s.equals("true"))
+            {
+                return new BinOp("=", new Number(0), new Number(0));
+            }
+            else
+                return new BinOp("<>", new Number(0), new Number(0));
         }
         else
         {

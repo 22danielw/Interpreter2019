@@ -53,7 +53,7 @@ public class Environment
         if (variables.containsKey(name))
             return variables.get(name);
         else
-            throw new RuntimeException("Environment does not return");
+            throw new RuntimeException("Variable " + name + " has not been found");
     }
 
 
