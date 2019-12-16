@@ -1,5 +1,10 @@
 package ast;
 
+import environment.Environment;
+import parser.Parser;
+
+import java.util.concurrent.locks.Condition;
+
 /**
  * A class that represents a binary operation between two expressions.
  * Extends the abstract Expression class.
@@ -25,6 +30,11 @@ public class BinOp extends Expression
         op = operator;
         exp1 = e1;
         exp2 = e2;
+    }
+
+    public boolean isRelOp()
+    {
+        return Parser.isRelop(op);
     }
 
     /**
@@ -58,5 +68,45 @@ public class BinOp extends Expression
     public Expression getExpression2()
     {
         return exp2;
+    }
+
+    public Value eval(Environment e)
+    {
+        if (!isRelOp())
+        {
+            if (op.equals("*"))
+                return new Value(exp1.eval(e).getIntVal() * exp2.eval(e).getIntVal());
+            else if (op.equals("/"))
+                return new Value(exp1.eval(e).getIntVal() / exp2.eval(e).getIntVal());
+            else if (op.equals("+"))
+                return new Value(exp1.eval(e).getIntVal() + exp2.eval(e).getIntVal());
+            else
+                return new Value(exp1.eval(e).getIntVal() - exp2.eval(e).getIntVal());
+        }
+        else
+        {
+            if (op.equals("="))
+            {
+                if (exp1.eval(e).whichVal().equals("b"))
+                    return new Value(exp1.eval(e).getBoolVal() != exp2.eval(e).getBoolVal());
+                else
+                    return new Value(exp1.eval(e).getIntVal() != exp2.eval(e).getIntVal());
+            }
+            else if (op.equals("<>"))
+            {
+                if (exp1.eval(e).whichVal().equals("b"))
+                    return new Value(exp1.eval(e).getBoolVal() == exp2.eval(e).getBoolVal());
+                else
+                    return new Value(exp1.eval(e).getIntVal() == exp2.eval(e).getIntVal());
+            }
+            else if (op.equals("<="))
+                return new Value(exp1.eval(e).getIntVal() <= exp2.eval(e).getIntVal());
+            else if (op.equals(">="))
+                return new Value(exp1.eval(e).getIntVal() >= exp2.eval(e).getIntVal());
+            else if (op.equals("<"))
+                return new Value(exp1.eval(e).getIntVal() < exp2.eval(e).getIntVal());
+            else
+                return new Value(exp1.eval(e).getIntVal() > exp2.eval(e).getIntVal());
+        }
     }
 }

@@ -1,5 +1,8 @@
 package ast;
 
+import environment.Environment;
+import java.util.Scanner;
+
 /**
  * A class that represents a Writeln() statement that
  * stores an expression.
@@ -34,5 +37,20 @@ public class Display extends Statement
     public Expression getExpression()
     {
         return exp;
+    }
+
+    /**
+     * Displays
+     * @param e
+     */
+    public void exec(Environment e)
+    {
+        System.out.println(exp.eval(e));
+        if (read != null)
+        {
+            Scanner sc = new Scanner(System.in);
+            int input = sc.nextInt();
+            e.setVariable(read.getVariable().getName(), new Value(input));
+        }
     }
 }

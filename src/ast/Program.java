@@ -1,4 +1,6 @@
 package ast;
+import environment.Environment;
+
 import javax.print.DocFlavor;
 import java.util.List;
 
@@ -35,4 +37,11 @@ public class Program
         return statements;
     }
 
+    public void exec(Environment e)
+    {
+        for (Statement s: statements)
+        {
+            s.exec(e);
+        }
+    }
 }

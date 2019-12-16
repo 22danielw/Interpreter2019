@@ -176,7 +176,7 @@ public class Parser
 
     }
 
-    private Expression parseExpressionHelper(Expression exp1) throws ScanErrorException
+    private Expression parseExpressionHelper(Expression exp1) throws ScanErrorException // FIX LATER
     {
         if (isRelop(currentToken))
         {
@@ -199,7 +199,7 @@ public class Parser
     {
         Expression exp = parseMultExpression();
 
-        if (currentToken.equals("-") || currentToken.equals("+"))
+        while (currentToken.equals("-") || currentToken.equals("+"))
         {
             if (currentToken.equals("-"))
             {
@@ -219,7 +219,7 @@ public class Parser
     {
         Expression exp = parseNegExpression();
 
-        if (currentToken.equals("*") || currentToken.equals("/"))
+        while (currentToken.equals("*") || currentToken.equals("/"))
         {
             if (currentToken.equals("*"))
             {

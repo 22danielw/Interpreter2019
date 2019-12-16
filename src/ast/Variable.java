@@ -1,5 +1,7 @@
 package ast;
 
+import environment.Environment;
+
 /**
  * A class that represents a Variable and
  * stores its name.
@@ -29,5 +31,10 @@ public class Variable extends Expression
     public String getName()
     {
         return name;
+    }
+
+    public Value eval(Environment e)
+    {
+        return e.getVariable(name);
     }
 }

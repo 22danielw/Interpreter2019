@@ -1,5 +1,7 @@
 package ast;
 
+import environment.Environment;
+
 /**
  * A class that represents a While statement with an Expression
  * and a Statement.
@@ -45,5 +47,16 @@ public class While extends Statement
     public Program getProgram()
     {
         return program;
+    }
+
+    public void exec(Environment e)
+    {
+        boolean cond;
+        if (expression.eval(e).whichVal().equals("i"))
+            throw new RuntimeException("Expected Relational Operation, Binary Op found.");
+        else
+            cond = expression.eval(e).getBoolVal();
+        while (cond)
+            program.exec(e);
     }
 }

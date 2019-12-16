@@ -1,5 +1,7 @@
 package ast;
 
+import environment.Environment;
+
 /**
  * A class that represents a Number. Stores an int value.
  *
@@ -38,5 +40,10 @@ public class Number extends Expression
     public String toString()
     {
         return Integer.toString(value);
+    }
+
+    public Value eval(Environment e)
+    {
+        return new Value(value);
     }
 }

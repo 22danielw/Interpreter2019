@@ -1,5 +1,7 @@
 package ast;
 
+import environment.Environment;
+
 /**
  * A class that represents an If statement with an Expression
  * and a Statement.
@@ -52,5 +54,23 @@ public class If extends Statement
     public Program getProgram2()
     {
         return program2;
+    }
+
+    /**
+     * @precondition the Expression stored by the If class
+     *               represents a boolean value.
+     * @param e
+     */
+    public void exec(Environment e)
+    {
+        boolean cond;
+        if (expression.eval(e).whichVal().equals("i"))
+            throw new RuntimeException("Expected Relational Operation, Binary Op found.");
+        else
+            cond = expression.eval(e).getBoolVal();
+        if (cond)
+            program1.exec(e);
+        else if (program2 != null)
+            program2.exec(e);
     }
 }

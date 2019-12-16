@@ -1,5 +1,7 @@
 package ast;
 
+import environment.Environment;
+
 /**
  * A class that represents an assignment statement for
  * the AST. It stores a variable and the associated expression.
@@ -43,5 +45,11 @@ public class Assignment extends Statement
     public Expression getExpression()
     {
         return exp;
+    }
+
+
+    public void exec(Environment e)
+    {
+        e.setVariable(var, exp.eval(e));
     }
 }

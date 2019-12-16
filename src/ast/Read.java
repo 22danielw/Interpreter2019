@@ -8,5 +8,10 @@ public class Read extends Statement
     {
         id = v;
     }
+
+    public Variable getVariable()
+    {
+        return id;
+    }
 }
 

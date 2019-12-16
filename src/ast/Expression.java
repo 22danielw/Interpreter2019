@@ -11,7 +11,12 @@ import environment.Environment;
 public abstract class Expression
 {
 
-    public void eval(Environment e)
+    /**
+     * Evaluates the subclass' method in
+     * @param e
+     * @return
+     */
+    public Value eval(Environment e)
     {
         throw new RuntimeException("Implement me");
     }

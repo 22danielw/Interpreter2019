@@ -11,7 +11,7 @@ import environment.Environment;
 public abstract class Statement
 {
 
-    public void eval(Environment e)
+    public void exec(Environment e)
     {
         throw new RuntimeException("Implement me");
     }

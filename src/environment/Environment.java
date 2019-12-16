@@ -1,5 +1,8 @@
 package environment;
 
+import ast.Expression;
+import ast.Value;
+
 import java.util.HashMap;
 
 /**
@@ -12,20 +15,15 @@ import java.util.HashMap;
  */
 public class Environment
 {
-    HashMap<String, Integer> variables;
-    Environment parent;
+    HashMap<String, Value> variables;
 
     /**
      * Constructs an environment by initializing the HashMap that
      * stores variable information.
-     *
-     * @param p the parent environment. If the Environment is the
-     *          global environment, p will be null.
      */
-    public Environment(Environment p)
+    public Environment()
     {
-        variables = new HashMap<String, Integer>();
-        parent = p;
+        variables = new HashMap<String, Value>();
     }
 
     /**
@@ -33,11 +31,11 @@ public class Environment
      * adding the name and value into the variables Map.
      *
      * @param variable the name of the variable being declared
-     * @param value the value of the variable being declared
+     * @param val the Value assigned to the label for the variable being declared
      */
-    public void setVariable(String variable, int value)
+    public void setVariable(String variable, Value val)
     {
-        variables.put(variable, value);
+        variables.put(variable, val);
     }
 
     /**
@@ -48,15 +46,14 @@ public class Environment
      *
      * @param name the name of the variable whose value is to be returned
      * @return the int value of the variable with the name name
-     * @throws Exception if the variable is not found
+     * @throws RuntimeException if the variable is not found
      */
-    public int getVariable(String name) throws Exception
+    public Value getVariable(String name) throws RuntimeException
     {
         if (variables.containsKey(name))
             return variables.get(name);
-        if (parent != null)
-            return parent.getVariable(name);
-        throw new Exception("Variable has not been declared");
+        else
+            throw new RuntimeException("Environment does not return");
     }
 
 
