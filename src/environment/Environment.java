@@ -1,17 +1,16 @@
 package environment;
 
-import ast.Expression;
 import ast.Value;
 
 import java.util.HashMap;
 
 /**
  * Represents an Environment that stores a Hashmap of
- * variable names and their corresponding Integer values.
- * It can also map procedure names to declarations.
+ * variable names and their corresponding Value objects.
  *
  * @author Daniel Wu
  * @version 10/19/2019
+ * @version 12/16/2019
  */
 public class Environment
 {
@@ -19,7 +18,8 @@ public class Environment
 
     /**
      * Constructs an environment by initializing the HashMap that
-     * stores variable information.
+     * stores variable information. The HashMap's keys are Strings
+     * (variable names) and the values are Values (boolean/int data).
      */
     public Environment()
     {
@@ -29,6 +29,8 @@ public class Environment
     /**
      * Declares a variable in the current environment by
      * adding the name and value into the variables Map.
+     * If the variable already exists, the Map will automatically
+     * map the new Value to the existing key.
      *
      * @param variable the name of the variable being declared
      * @param val the Value assigned to the label for the variable being declared
@@ -39,13 +41,11 @@ public class Environment
     }
 
     /**
-     * Returns the value of a variable with a given name. If the current
-     * environment does not contain the variable, the method looks into
-     * the parent environments. If no environment contains the variable, the
-     * method throws an Exception.
+     * Returns the value of a variable with a given name from the
+     * HashMap.
      *
      * @param name the name of the variable whose value is to be returned
-     * @return the int value of the variable with the name name
+     * @return the Value of the variable with the name name
      * @throws RuntimeException if the variable is not found
      */
     public Value getVariable(String name) throws RuntimeException

@@ -19,6 +19,7 @@ import java.util.HashMap;
  * @author Daniel Wu
  *
  * @version 10/19/19
+ * @version 12/16/19
  */
 public class Parser
 {
@@ -177,7 +178,7 @@ public class Parser
         {
             String s = parseRelop();
             Expression e = parseExpression();
-            exp = new BinOp(s, exp, e);
+            exp = new Operation(s, exp, e);
         }
         return exp;
     }
@@ -199,12 +200,12 @@ public class Parser
             if (currentToken.equals("-"))
             {
                 eat("-");
-                exp = new BinOp("-", exp, parseAddExpression());
+                exp = new Operation("-", exp, parseAddExpression());
             }
             else
             {
                 eat("+");
-                exp = new BinOp("+", exp, parseAddExpression());
+                exp = new Operation("+", exp, parseAddExpression());
             }
         }
         return exp;
@@ -219,12 +220,12 @@ public class Parser
             if (currentToken.equals("*"))
             {
                 eat("*");
-                exp = new BinOp("*", exp, parseMultExpression());
+                exp = new Operation("*", exp, parseMultExpression());
             }
             else
             {
                 eat("/");
-                exp = new BinOp("/", exp, parseMultExpression());
+                exp = new Operation("/", exp, parseMultExpression());
             }
         }
         return exp;
@@ -237,7 +238,7 @@ public class Parser
         if (currentToken.equals("-"))
         {
             eat("-");
-            return new BinOp("*", new Number(-1), parseValue());
+            return new Operation("*", new Number(-1), parseValue());
         }
         else
         {
@@ -265,10 +266,10 @@ public class Parser
             eat(currentToken);
             if (s.equals("true"))
             {
-                return new BinOp("=", new Number(0), new Number(0));
+                return new Operation("=", new Number(0), new Number(0));
             }
             else
-                return new BinOp("<>", new Number(0), new Number(0));
+                return new Operation("<>", new Number(0), new Number(0));
         }
         else
         {
