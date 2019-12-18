@@ -26,11 +26,13 @@ public class Parser
 
     private Scanner scanner;
     private String currentToken;
-    private HashMap<String, Expression> variables;
 
     /**
      * Constructs a Parser object from a Scanner and assigns
-     * instance variables scanner and currentToken.
+     * instance variables scanner and currentToken. The Scanner
+     * feeds the Parser object a stream of tokens to parse,
+     * and the currentToken is set to the first token of the
+     * stream. currentToken represents the token being parsed.
      *
      * @param s the Scanner that feeds tokens to the Parser
      * @throws ScanErrorException when there is an error in the Scanner
@@ -39,12 +41,12 @@ public class Parser
     {
         scanner = s;
         currentToken = scanner.nextToken();
-        variables = new HashMap<String, Expression>();
     }
 
     /**
      * Eats a token and sets the currentToken the next token provided by
-     * the scanner if the eaten token matches the previous currentToken.
+     * the scanner if the token passed into the eat() method matches the
+     * currentToken
      *
      * @precondition currentToken is valid and initialized
      * @param expected the expected currentToken
@@ -64,10 +66,10 @@ public class Parser
     }
 
     /**
-     * Parses an integer and returns its value. Eats the integer.
+     * Parses an integer and returns its as a Number object. Eats the integer.
      *
      * @precondition currentToken is an integer
-     * @postcondition number token has been eaten
+     * @postcondition Number token has been eaten
      * @return the value of the parsed integer String
      * @throws ScanErrorException if eaten token does not match the currentToken
      */
@@ -79,11 +81,11 @@ public class Parser
     }
 
     /**
-     * Parses and returns a program. A Program contains any number of
-     * Procedure Declarations, followed by a single statement (typically
-     * a BEGIN END block). Returns a Program object.
+     * Parses and returns a program. A Program contains any number of statements
+     * separated by either an "end", "else", or at the end of a file. The method
+     * returns a Program object containing all statements in the block.
      *
-     * @return a Program object storing the ProcedureDeclarations and statement
+     * @return a Program object storing the block of statements.
      * @throws ScanErrorException if eaten token does not match currentToken
      */
     public Program parseProgram() throws ScanErrorException
@@ -99,8 +101,13 @@ public class Parser
 
     /**
      * The method parses a single statement based on the grammar for
-     * parsing Statement.
+     * parsing Statement. Either returns an Assignment, Display, While, or
+     * If object, all of which are subclasses of Statement, depending on what
+     * the currentToken is when entering the method. Each part of the statement
+     * is then categorized and returned as its respective object containing
+     * information for execution.
      *
+     * @precondition the Statement is one of four recognized by the grammar.
      * @return a new Statement class based on what kind of Statement the file contains
      * @throws ScanErrorException if eaten tokens do not match their currentToken
      */
@@ -141,6 +148,17 @@ public class Parser
         }
     }
 
+    /**
+     * Parses the second part of a display statement that the user may have
+     * included. Called when the user makes a display statement. If the user
+     * does not include a read statement after the display statement, returns a
+     * null object. The returned object is used to construct the Display
+     * Statement.
+     *
+     * @return a new Read object containing the variable the object reads to, or
+     *         a null object.
+     * @throws ScanErrorException if eaten tokens do not match their currentToken
+     */
     private Read parseSt1() throws ScanErrorException
     {
         if (currentToken.equals("read"))
@@ -154,6 +172,14 @@ public class Parser
             return null;
     }
 
+    /**
+     * Parses the else block of an If statement and returns the block of statements
+     * as a Program object. If there is no else block, method returns null. Used
+     * to construct an If statement.
+     *
+     * @return the block of statements representing the else block of an If statement.
+     * @throws ScanErrorException if eaten tokens do not match their currentToken
+     */
     private Program parseSt2() throws ScanErrorException
     {
         if (currentToken.equals("end"))
@@ -171,6 +197,17 @@ public class Parser
     }
 
 
+    /**
+     * Parses an Expression following the grammar by assigning either returning
+     * an AddExpr or recursively parsing a sequence of relational operations between
+     * two or more expressions. Only expressions that are boolean values or evaluate
+     * to boolean values may be chained together. Chain expressions always evaluate
+     * from right to left; for example, true = 2 < 3 works, but 2 < 3 = true does not.
+     *
+     * @return either an AddExpr or a chain of relational operations, eventually
+     *         returning an Expression object.
+     * @throws ScanErrorException if eaten tokens do not match their currentToken
+     */
     private Expression parseExpression() throws ScanErrorException
     {
         Expression exp = parseAddExpression();
@@ -184,11 +221,12 @@ public class Parser
     }
 
     /**
-     * Parses a term as either a term * factor, term / factor,
-     * or factor based on the grammar provided.
+     * Parses an expression for addition/subtraction, either returning a Binary
+     * Operation that adds a MultExpr and an AddExpr or an AddExpr
+     * recursively. Addition/subtraction can be chained together as long
+     * as each expression only returns a numerical value.
      *
-     * @return the value of the term parsed based on grammars and
-     *         evaluation rules
+     * @return the AddExpr following the grammar rules provided.
      * @throws ScanErrorException if eaten tokens do not match their currentToken
      */
     private Expression parseAddExpression() throws ScanErrorException
@@ -211,6 +249,15 @@ public class Parser
         return exp;
     }
 
+    /**
+     * Parses an expression for multiplication/division, either returning a Binary
+     * Operation that adds a NegExpr and a MultExpr or a MultExpr
+     * recursively. Multiplication/division can be chained together as long
+     * as each expression only returns a numerical value.
+     *
+     * @return a MultExpr that follows the grammar rules provided
+     * @throws ScanErrorException if eaten tokens do not match their currentToken
+     */
     private Expression parseMultExpression() throws ScanErrorException
     {
         Expression exp = parseNegExpression();
@@ -232,6 +279,16 @@ public class Parser
     }
 
 
+    /**
+     * Parses a NegExpr, defined as a Value or a negative value. If the
+     * value is negative, the negative sign is eaten and an Operation
+     * multiplying the Value with -1 is returned to represent the negative
+     * value. However, if there is no negative value, the Value is returned
+     * based on the grammar.
+     *
+     * @return a NegExpr based on the grammar rules provided
+     * @throws ScanErrorException if eaten tokens do not match their currentToken
+     */
     private Expression parseNegExpression() throws ScanErrorException
     {
 
@@ -247,6 +304,14 @@ public class Parser
         }
     }
 
+    /**
+     * Parses a Value defined as either a boolean, integer, Expression in
+     * parenthesis, or a variable id. Eats all parts of the Value and returns
+     * the its Expression representation.
+     *
+     * @return a Value based on the grammar rules provided
+     * @throws ScanErrorException if eaten tokens do not match their currentToken
+     */
     private Expression parseValue() throws ScanErrorException
     {
         if (currentToken.equals("("))
@@ -280,8 +345,8 @@ public class Parser
     }
 
     /**
-     * Returns whether or not the given String stores a number.
-     * Scans each character and determines if it is a digit.
+     * This is a static utility method. It returns whether or not the given
+     * String stores a number. Scans each character to determine if it is a digit.
      *
      * @param s the String being evaluated
      * @return true if the String is a number; false otherwise
@@ -299,6 +364,8 @@ public class Parser
 
     /**
      * Returns whether or not the given String is a relational operator.
+     * Relational operators are considered =, <>, <=, <, >, >=.
+     * This is a static utility method.
      *
      * @param op the String being evaluated
      * @return true if the String is a relop; false otherwise
@@ -311,6 +378,8 @@ public class Parser
 
     /**
      * Parses a Relational Operator and returns the result as a String.
+     * Eats the relational operator. If the token is not an operator,
+     * an Exception is thrown.
      *
      * @return the relational operator found as a String
      * @throws ScanErrorException if eaten tokens do not match their currentToken
