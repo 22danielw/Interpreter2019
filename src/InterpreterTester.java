@@ -33,13 +33,14 @@ public class InterpreterTester
      */
     public static void main(String[] args) throws ScanErrorException, FileNotFoundException
     {
-        test("tempTest.txt");
+        simpleTest();
+        //simpleTest2();
     }
 
     /**
      * Executes the code in simpleTest.txt via the SIMPLE interpreter. Can
      * be called by the main method.
-     * Note: simpleTest.txt has a statement that says x < 5 > 3; however, this
+     * Note: simpleTest.txt has a statement that says "x < 5 > 3"; however, this
      * SIMPLE interpreter does not support this functionality because it evaluates
      * the statements separately, returning a boolean one expression before evaluating
      * the other.
@@ -61,7 +62,7 @@ public class InterpreterTester
     /**
      * Executes the code in simpleTest2.txt via the SIMPLE interpreter. Can
      * be called by the main method.
-     * Note: simpleText2.txt has a statement that says if (limit + 5) then ...
+     * Note: simpleText2.txt has a statement that says "if (limit + 5)" then ...
      * This SIMPLE interpreter does not support this functionality because the
      * expression given as a condition for an if statement must return a boolean,
      * whether it is a relational operator, boolean variable, or "true or false".
@@ -82,8 +83,7 @@ public class InterpreterTester
 
     /**
      * Executes the code in in any SIMPLE file using the interpreter. Used to test
-     * custom files. Currently, tests a file called tempTest, which demonstrates
-     * the Interpreter's basic functionality.
+     * custom files.
      *
      * @param s the name of the SIMPLE file being executed
      * @throws FileNotFoundException the name of the given file is invalid
