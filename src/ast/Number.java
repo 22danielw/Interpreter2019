@@ -25,16 +25,6 @@ public class Number extends Expression
     }
 
     /**
-     * A getter for the int value stored by the Number class.
-     *
-     * @return the instance field value
-     */
-    public int getValue()
-    {
-        return value;
-    }
-
-    /**
      * A toString method that will print the Number's value as a String.
      * Overrides the Object toString() method.
      *

@@ -4,7 +4,6 @@ import parser.Parser;
 import scanner.ScanErrorException;
 import scanner.Scanner;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -33,8 +32,9 @@ public class InterpreterTester
      */
     public static void main(String[] args) throws ScanErrorException, FileNotFoundException
     {
-        simpleTest();
+        //simpleTest();
         //simpleTest2();
+        simpleTest3();
     }
 
     /**
@@ -81,6 +81,25 @@ public class InterpreterTester
         program1.exec(env);
     }
 
+
+    /**
+     * Executes the code in simpleTest3.txt via the SIMPLE interpreter. Can
+     * be called by the main method.
+     *
+     * @throws FileNotFoundException the name of the given file is invalid
+     * @throws ScanErrorException when there is an error in scanning the file
+     */
+    public static void simpleTest3() throws ScanErrorException, FileNotFoundException
+    {
+        String s = "simpleTest3.txt";
+        InputStream reader = new FileInputStream(s);
+        Scanner scanner = new Scanner(reader);
+        Parser p = new Parser(scanner);
+        Environment env = new Environment();
+        Program program1 = p.parseProgram();
+        program1.exec(env);
+    }
+
     /**
      * Executes the code in in any SIMPLE file using the interpreter. Used to test
      * custom files.
@@ -98,4 +117,5 @@ public class InterpreterTester
         Program program1 = p.parseProgram();
         program1.exec(env);
     }
+
 }

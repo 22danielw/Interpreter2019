@@ -66,21 +66,6 @@ public class Parser
     }
 
     /**
-     * Parses an integer and returns its as a Number object. Eats the integer.
-     *
-     * @precondition currentToken is an integer
-     * @postcondition Number token has been eaten
-     * @return the value of the parsed integer String
-     * @throws ScanErrorException if eaten token does not match the currentToken
-     */
-    private Number parseNumber() throws ScanErrorException
-    {
-        int num = Integer.parseInt(currentToken);
-        eat(currentToken);
-        return new Number(num);
-    }
-
-    /**
      * Parses and returns a program. A Program contains any number of statements
      * separated by either an "end", "else", or at the end of a file. The method
      * returns a Program object containing all statements in the block.
@@ -214,8 +199,7 @@ public class Parser
         while (isRelop(currentToken))
         {
             String s = parseRelop();
-            Expression e = parseExpression();
-            exp = new Operation(s, exp, e);
+            exp = new Operation(s, exp, parseExpression());
         }
         return exp;
     }
@@ -323,7 +307,9 @@ public class Parser
         }
         else if (isNumber(currentToken))
         {
-            return parseNumber();
+            int num = Integer.parseInt(currentToken);
+            eat(currentToken);
+            return new Number(num);
         }
         else if (currentToken.equals("true") || currentToken.equals("false"))
         {

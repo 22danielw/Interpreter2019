@@ -1,0 +1,19 @@
+display 3
+assign x = 3
+assign y = -1
+assign z = true
+
+if z <> true then
+    display x * y
+else
+    display x + y
+end
+
+while y <> x do
+    assign y = y + 1
+    display y
+end
+
+if (y * 3) > 4 then
+    display true read x
+end
