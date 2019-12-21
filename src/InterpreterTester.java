@@ -24,7 +24,19 @@ public class InterpreterTester
     /**
      * Main method for the Interpreter Tester. This method is used to call
      * one of three test methods to either test the Interpreter based on
-     * given test cases or a custom criteria.
+     * given test cases or a custom criteria. First, the user inputs the index of
+     * the test number they would like to run. (1 for simpleTest, 2 for simpleTest2, etc)
+     * Then, the code in that test file is run using the static tesT() method.
+     *
+     * Note: simpleTest.txt has a statement that says "x < 5 > 3"; however, this
+     *       SIMPLE interpreter does not support this functionality because it evaluates
+     *       the statements separately, returning a boolean one expression before evaluating
+     *       the other.
+     *
+     * Note: simpleText2.txt has a statement that says "if (limit + 5) then ..."
+     *       This SIMPLE interpreter does not support this functionality because the
+     *       expression given as a condition for an if statement must return a boolean,
+     *       whether it is a relational operator, boolean variable, or "true or false".
      *
      * @param args Runtime arguments
      * @throws FileNotFoundException the name of the given file is invalid
@@ -32,72 +44,16 @@ public class InterpreterTester
      */
     public static void main(String[] args) throws ScanErrorException, FileNotFoundException
     {
-        //simpleTest();
-        //simpleTest2();
-        simpleTest3();
-    }
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        System.out.println("Please input the index of the test file you would like to run:");
+        int testID = scanner.nextInt();
+        String s;
+        if (testID == 1)
+             s = "simpleTest.txt";
+        else
+            s = "simpleTest " + testID + ".txt";
+        test(s);
 
-    /**
-     * Executes the code in simpleTest.txt via the SIMPLE interpreter. Can
-     * be called by the main method.
-     * Note: simpleTest.txt has a statement that says "x < 5 > 3"; however, this
-     * SIMPLE interpreter does not support this functionality because it evaluates
-     * the statements separately, returning a boolean one expression before evaluating
-     * the other.
-     *
-     * @throws FileNotFoundException the name of the given file is invalid
-     * @throws ScanErrorException when there is an error in scanning the file
-     */
-    public static void simpleTest() throws ScanErrorException, FileNotFoundException
-    {
-        String s = "simpleTest.txt";
-        InputStream reader = new FileInputStream(s);
-        Scanner scanner = new Scanner(reader);
-        Parser p = new Parser(scanner);
-        Environment env = new Environment();
-        Program program1 = p.parseProgram();
-        program1.exec(env);
-    }
-
-    /**
-     * Executes the code in simpleTest2.txt via the SIMPLE interpreter. Can
-     * be called by the main method.
-     * Note: simpleText2.txt has a statement that says "if (limit + 5)" then ...
-     * This SIMPLE interpreter does not support this functionality because the
-     * expression given as a condition for an if statement must return a boolean,
-     * whether it is a relational operator, boolean variable, or "true or false".
-     *
-     * @throws FileNotFoundException the name of the given file is invalid
-     * @throws ScanErrorException when there is an error in scanning the file
-     */
-    public static void simpleTest2() throws ScanErrorException, FileNotFoundException
-    {
-        String s = "simpleTest2.txt";
-        InputStream reader = new FileInputStream(s);
-        Scanner scanner = new Scanner(reader);
-        Parser p = new Parser(scanner);
-        Environment env = new Environment();
-        Program program1 = p.parseProgram();
-        program1.exec(env);
-    }
-
-
-    /**
-     * Executes the code in simpleTest3.txt via the SIMPLE interpreter. Can
-     * be called by the main method.
-     *
-     * @throws FileNotFoundException the name of the given file is invalid
-     * @throws ScanErrorException when there is an error in scanning the file
-     */
-    public static void simpleTest3() throws ScanErrorException, FileNotFoundException
-    {
-        String s = "simpleTest3.txt";
-        InputStream reader = new FileInputStream(s);
-        Scanner scanner = new Scanner(reader);
-        Parser p = new Parser(scanner);
-        Environment env = new Environment();
-        Program program1 = p.parseProgram();
-        program1.exec(env);
     }
 
     /**
